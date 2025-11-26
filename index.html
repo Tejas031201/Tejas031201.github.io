@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IT NETRA - Digital Services & E-Seva Kendra</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #0056b3; /* Govt Blue */
+            --secondary: #ff9800; /* Orange */
+            --dark: #333;
+            --light: #f4f7f6;
+            --whatsapp: #25D366;
+            --insta: #C13584;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; scroll-behavior: smooth; }
+        body { background-color: var(--light); color: var(--dark); overflow-x: hidden; }
+
+        /* --- Header --- */
+        header { background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: fixed; width: 100%; top: 0; z-index: 1000; }
+        nav { max-width: 1200px; margin: 0 auto; padding: 1rem; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 1.5rem; font-weight: 700; color: var(--primary); text-decoration: none; display: flex; align-items: center; gap: 10px; }
+        .logo span { color: var(--secondary); }
+        .nav-links a { margin-left: 20px; text-decoration: none; color: var(--dark); font-weight: 500; transition: 0.3s; }
+        .nav-links a:hover { color: var(--primary); }
+        .menu-btn { display: none; font-size: 1.5rem; cursor: pointer; }
+
+        /* --- Creative Slider (Carousel) --- */
+        .slider-container {
+            position: relative;
+            height: 85vh;
+            margin-top: 60px;
+            overflow: hidden;
+        }
+        .slide {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            opacity: 0; transition: opacity 1s ease-in-out;
+            background-size: cover; background-position: center;
+        }
+        .slide.active { opacity: 1; }
+        
+        .slide-content {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: white;
+            background: rgba(0, 0, 0, 0.6); /* Dark overlay for readability */
+            padding: 40px;
+            border-radius: 15px;
+            width: 80%;
+            max-width: 800px;
+            border-left: 5px solid var(--secondary);
+        }
+        .slide-content h1 { font-size: 3rem; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 2px; }
+        .slide-content p { font-size: 1.2rem; margin-bottom: 25px; }
+        .btn { padding: 12px 30px; border-radius: 30px; text-decoration: none; font-weight: 600; transition: 0.3s; display: inline-block; cursor: pointer; }
+        .btn-primary { background: var(--secondary); color: white; border: 2px solid var(--secondary); }
+        .btn-primary:hover { background: transparent; color: var(--secondary); }
+
+        /* --- News Ticker (Marquee) --- */
+        .news-ticker {
+            background: var(--primary);
+            color: white;
+            padding: 10px 0;
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+        }
+        .ticker-content {
+            display: inline-block;
+            animation: marquee 20s linear infinite;
+            font-weight: 500;
+        }
+        @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+
+        /* --- Search Bar --- */
+        .search-wrapper { max-width: 600px; margin: 40px auto; padding: 0 20px; position: relative; }
+        #serviceSearch { width: 100%; padding: 15px 50px 15px 25px; border-radius: 50px; border: 2px solid #ddd; font-size: 1rem; outline: none; transition: 0.3s; }
+        #serviceSearch:focus { border-color: var(--primary); box-shadow: 0 0 10px rgba(0,86,179,0.2); }
+        .search-icon { position: absolute; right: 40px; top: 50%; transform: translateY(-50%); color: #888; }
+
+        /* --- Services Section --- */
+        .services { max-width: 1200px; margin: 0 auto 50px; padding: 0 20px; }
+        .section-title { text-align: center; margin-bottom: 10px; color: var(--primary); font-size: 2.2rem; }
+        .section-subtitle { text-align: center; margin-bottom: 40px; color: #666; }
+        
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
+        .service-card {
+            background: white; padding: 30px; border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: 0.3s;
+            text-align: center; border-top: 5px solid transparent;
+            position: relative; overflow: hidden;
+        }
+        .service-card:hover { transform: translateY(-10px); border-top: 5px solid var(--secondary); box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
+        .service-card i { font-size: 3rem; color: var(--primary); margin-bottom: 20px; background: #eef4fc; padding: 20px; border-radius: 50%; }
+        .service-card h3 { margin-bottom: 10px; font-size: 1.2rem; }
+        
+        /* New: Check Documents Button in Card */
+        .doc-btn { font-size: 0.8rem; color: var(--primary); text-decoration: underline; cursor: pointer; margin-top: 10px; display: inline-block; }
+
+        /* --- Document Checklist Modal --- */
+        .modal {
+            display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.8); align-items: center; justify-content: center;
+        }
+        .modal-content { background: white; padding: 30px; border-radius: 10px; max-width: 500px; width: 90%; position: relative; animation: slideDown 0.3s; }
+        @keyframes slideDown { from {transform: translateY(-50px); opacity: 0;} to {transform: translateY(0); opacity: 1;} }
+        .close-modal { position: absolute; top: 15px; right: 20px; font-size: 28px; cursor: pointer; color: #888; }
+        .modal-list { text-align: left; margin-top: 20px; }
+        .modal-list li { margin-bottom: 10px; padding-left: 20px; position: relative; list-style: none; }
+        .modal-list li::before { content: '✔'; color: var(--whatsapp); position: absolute; left: 0; font-weight: bold; }
+
+        /* --- Footer --- */
+        footer { background: #1a1a1a; color: white; padding: 50px 20px 20px; margin-top: 50px; }
+        .footer-content { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; }
+        .contact-item { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; }
+        .contact-item a { color: #ccc; text-decoration: none; }
+        .copyright { text-align: center; margin-top: 50px; border-top: 1px solid #333; padding-top: 20px; color: #777; }
+
+        /* --- Floating Buttons --- */
+        .floating-socials { position: fixed; bottom: 20px; right: 20px; display: flex; flex-direction: column; gap: 15px; z-index: 999; }
+        .social-btn { width: 55px; height: 55px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 28px; text-decoration: none; box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: 0.3s; }
+        .wa-btn { background-color: var(--whatsapp); }
+        .insta-btn { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); }
+        .social-btn:hover { transform: scale(1.1); }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .slide-content h1 { font-size: 1.8rem; }
+            nav { flex-direction: column; gap: 10px; }
+            .nav-links { display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; }
+            .nav-links a { margin: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <nav>
+            <a href="#" class="logo"><i class="fa-solid fa-laptop-medical"></i> IT NETRA <span>.in</span></a>
+            <div class="nav-links">
+                <a href="#home">Home</a>
+                <a href="#services">Services</a>
+                <a href="#about">About</a>
+                <a href="#contact">Contact</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Creative Slider Section -->
+    <div class="slider-container" id="home">
+        <!-- Slide 1: Modern Computer Office -->
+        <div class="slide active" style="background-image: url('https://images.unsplash.com/photo-1497215728101-856f4ea42174?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80');">
+            <div class="slide-content">
+                <h1>Welcome to IT NETRA</h1>
+                <p>Your Trusted Partner for Digital & Government Services.</p>
+                <a href="#services" class="btn btn-primary">Explore Services</a>
+            </div>
+        </div>
+        <!-- Slide 2: Typing/Paperwork -->
+        <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80');">
+            <div class="slide-content">
+                <h1>Fast & Accurate</h1>
+                <p>Pan Card, Aadhar Updates, and Legal Agreements made simple.</p>
+                <a href="https://wa.me/918446670508" class="btn btn-primary">Chat on WhatsApp</a>
+            </div>
+        </div>
+        <!-- Slide 3: Growth/Business -->
+        <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80');">
+            <div class="slide-content">
+                <h1>Grow Your Business</h1>
+                <p>Website Design, Social Media Management & Shop Act Licenses.</p>
+                <a href="#contact" class="btn btn-primary">Call Now</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- News Ticker -->
+    <div class="news-ticker">
+        <div class="ticker-content">
+            📢 Welcome to IT NETRA! We are now open for PM Awas Yojana forms. | 📝 Update your Aadhar details today! | 🚀 Get your Business Website starting at best prices. | 📞 Call 8446670508 for inquiry.
+        </div>
+    </div>
+
+    <!-- Search -->
+    <div class="search-wrapper">
+        <input type="text" id="serviceSearch" placeholder="🔍 Search services (e.g., 'Pan', 'Job', 'Shopact')..." onkeyup="filterServices()">
+        <i class="fa-solid fa-search search-icon"></i>
+    </div>
+
+    <!-- Services -->
+    <section class="services" id="services">
+        <h2 class="section-title">Our Services</h2>
+        <p class="section-subtitle">Click "Check Docs" to see what you need to bring!</p>
+        
+        <div class="services-grid">
+            <!-- Government IDs -->
+            <div class="service-card" data-name="aadhar card update">
+                <i class="fa-solid fa-fingerprint"></i>
+                <h3>Aadhar Services</h3>
+                <p>Address, Name, DOB Change.</p>
+                <span class="doc-btn" onclick="openModal('Aadhar')">Check Docs needed</span>
+            </div>
+
+            <div class="service-card" data-name="pan card">
+                <i class="fa-solid fa-id-card"></i>
+                <h3>PAN Card</h3>
+                <p>New Pan & Corrections.</p>
+                <span class="doc-btn" onclick="openModal('Pan')">Check Docs needed</span>
+            </div>
+
+            <div class="service-card" data-name="voter id">
+                <i class="fa-solid fa-check-to-slot"></i>
+                <h3>Voter ID</h3>
+                <p>New Card & Shift Address.</p>
+                <span class="doc-btn" onclick="openModal('Voter')">Check Docs needed</span>
+            </div>
+
+            <div class="service-card" data-name="epfo pf">
+                <i class="fa-solid fa-piggy-bank"></i>
+                <h3>EPFO / PF Work</h3>
+                <p>Withdrawal & KYC Update.</p>
+                <span class="doc-btn" onclick="openModal('General')">Check Docs needed</span>
+            </div>
+
+            <!-- Business -->
+            <div class="service-card" data-name="shopact licence">
+                <i class="fa-solid fa-store"></i>
+                <h3>Shopact Licence</h3>
+                <p>Registration & Renewal.</p>
+                <span class="doc-btn" onclick="openModal('Shop')">Check Docs needed</span>
+            </div>
+
+            <div class="service-card" data-name="food licence fssai">
+                <i class="fa-solid fa-utensils"></i>
+                <h3>Food Licence (FSSAI)</h3>
+                <p>For Hotels & Home Kitchens.</p>
+            </div>
+
+            <div class="service-card" data-name="udyam aadhar">
+                <i class="fa-solid fa-industry"></i>
+                <h3>Udyam Aadhar</h3>
+                <p>MSME Registration.</p>
+            </div>
+
+            <div class="service-card" data-name="trademark iso">
+                <i class="fa-solid fa-award"></i>
+                <h3>Trademark & ISO</h3>
+                <p>Protect your brand name.</p>
+            </div>
+
+            <div class="service-card" data-name="rent agreement">
+                <i class="fa-solid fa-file-contract"></i>
+                <h3>Rent Agreement</h3>
+                <p>Online Registered Agreement.</p>
+            </div>
+
+            <!-- Digital -->
+            <div class="service-card" data-name="website design">
+                <i class="fa-solid fa-laptop-code"></i>
+                <h3>Website Design</h3>
+                <p>Get your business online.</p>
+            </div>
+
+            <div class="service-card" data-name="social media marketing">
+                <i class="fa-brands fa-instagram"></i>
+                <h3>Social Media Mgmt</h3>
+                <p>Instagram & Facebook Growth.</p>
+            </div>
+
+            <div class="service-card" data-name="whatsapp marketing">
+                <i class="fa-brands fa-whatsapp"></i>
+                <h3>Bulk WhatsApp</h3>
+                <p>Send 1000s of messages.</p>
+            </div>
+
+            <div class="service-card" data-name="political promotion">
+                <i class="fa-solid fa-bullhorn"></i>
+                <h3>Political Promotion</h3>
+                <p>Banner, Social Media & Strategy.</p>
+            </div>
+
+            <!-- Other -->
+            <div class="service-card" data-name="job forms">
+                <i class="fa-solid fa-briefcase"></i>
+                <h3>Govt Job Forms</h3>
+                <p>Accurate Online Filling.</p>
+            </div>
+
+            <div class="service-card" data-name="pm awas yojana">
+                <i class="fa-solid fa-house-chimney"></i>
+                <h3>PM Awas Yojana</h3>
+                <p>Form Filling Assistance.</p>
+            </div>
+            
+            <div class="service-card" data-name="police verification">
+                <i class="fa-solid fa-user-shield"></i>
+                <h3>Police Verification</h3>
+                <p>For Passport & Jobs.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Document Modal -->
+    <div id="docModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <h3 id="modalTitle">Documents Required</h3>
+            <ul class="modal-list" id="modalList">
+                <!-- List items injected by JS -->
+            </ul>
+            <p style="margin-top:20px; font-size:0.9rem; color:#666;">* Bring original copies for scanning.</p>
+        </div>
+    </div>
+
+    <!-- About Section -->
+    <section class="services" id="about" style="background: white; padding: 50px; border-radius: 10px;">
+        <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 30px;">
+            <div style="max-width: 500px;">
+                <h2 style="color: var(--primary);">Who is IT NETRA?</h2>
+                <p style="margin-top: 15px; line-height: 1.6;">
+                    <strong>IT NETRA</strong> is your local digital gateway. Owned by <strong>Tejas Kshirsagar</strong>, we bridge the gap between complex government processes and the common man. <br><br>
+                    Whether you need to open a bank account, apply for a license, or market your new business on Instagram, we do it all under one roof.
+                </p>
+                <a href="#contact" class="btn btn-primary" style="margin-top: 20px;">Visit Our Shop</a>
+            </div>
+            <img src="https://images.unsplash.com/photo-1573164713988-8665fc963095?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Tejas Office" style="width: 100%; max-width: 400px; border-radius: 10px; box-shadow: 0 10px 20px rgba(0,0,0,0.1);">
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="footer-content">
+            <div>
+                <h3>IT NETRA</h3>
+                <p>Empowering Digital India.</p>
+            </div>
+            <div>
+                <h4>Contact Tejas</h4>
+                <div class="contact-item"><i class="fa-solid fa-phone"></i> <a href="tel:8446670508">8446670508</a></div>
+                <div class="contact-item"><i class="fa-solid fa-envelope"></i> <a href="mailto:contact@itnetra.in">contact@itnetra.in</a></div>
+                <div class="contact-item"><i class="fa-brands fa-instagram"></i> <a href="https://instagram.com/it_netra.in">@it_netra.in</a></div>
+            </div>
+        </div>
+        <div class="copyright">&copy; 2023 IT NETRA. Designed for Business Growth.</div>
+    </footer>
+
+    <!-- Floating Buttons -->
+    <div class="floating-socials">
+        <a href="https://instagram.com/it_netra.in" class="social-btn insta-btn"><i class="fa-brands fa-instagram"></i></a>
+        <a href="https://wa.me/918446670508" class="social-btn wa-btn"><i class="fa-brands fa-whatsapp"></i></a>
+    </div>
+
+    <!-- Script -->
+    <script>
+        // Slider Logic
+        let slides = document.querySelectorAll('.slide');
+        let currentSlide = 0;
+        function nextSlide() {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (currentSlide + 1) % slides.length;
+            slides[currentSlide].classList.add('active');
+        }
+        setInterval(nextSlide, 5000); // Change every 5 seconds
+
+        // Search Logic
+        function filterServices() {
+            let input = document.getElementById('serviceSearch').value.toLowerCase();
+            let cards = document.getElementsByClassName('service-card');
+            for (let card of cards) {
+                let name = card.getAttribute('data-name');
+                let title = card.getElementsByTagName('h3')[0].innerText.toLowerCase();
+                if (name.includes(input) || title.includes(input)) {
+                    card.style.display = "block";
+                } else {
+                    card.style.display = "none";
+                }
+            }
+        }
+
+        // Modal Logic
+        const docs = {
+            'Aadhar': ['Old Aadhar Card', 'Proof of Address (Light bill/Rent Agreement)', 'Proof of ID (Pan/Voter)', 'Mobile Number linked to Aadhar'],
+            'Pan': ['Aadhar Card', '2 Passport Photos', 'Signature', 'Mobile Number'],
+            'Voter': ['Aadhar Card', 'Passport Photo', 'Address Proof', 'Age Proof (School LC/Birth Cert)'],
+            'Shop': ['Aadhar Card', 'Pan Card', 'Shop Photo', 'Light Bill of Shop', 'Rent Agreement (if rented)'],
+            'General': ['Aadhar Card', 'Pan Card', 'Bank Passbook', 'Passport Photo', 'Mobile Number']
+        };
+
+        function openModal(type) {
+            let list = docs[type] || docs['General'];
+            let html = '';
+            list.forEach(item => html += `<li>${item}</li>`);
+            document.getElementById('modalList').innerHTML = html;
+            document.getElementById('modalTitle').innerText = type + ' - Documents Required';
+            document.getElementById('docModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('docModal').style.display = 'none';
+        }
+
+        // Close modal if clicking outside
+        window.onclick = function(event) {
+            let modal = document.getElementById('docModal');
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>
